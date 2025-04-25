@@ -35,7 +35,7 @@ int main() {
 	printf("0:丁,1:半\n");
 	printf("予想してください:");
 
-	if (scanf("%d", &userGuess) != 1 || (userGuess != 1)) {
+	if (scanf_s("%d", &userGuess) != 1 || (userGuess != 0&& userGuess !=1)) {
 		printf("無効な入力です。0か1で予想してください。\n");
 		return 1;
 	}
