@@ -4,7 +4,7 @@ int Recursive(int hour) {
 	if (hour == 1) {
 		return 100;
 	}
-	int previousWage = RecursiveWage(hour - 1);
+	int previousWage = Recursive(hour - 1);
 	return previousWage*2-50;
 }
 
@@ -15,7 +15,7 @@ int main() {
 	int totalRecursiveWage = 0;
 
 	for (int i = 1; i <= hours; i++) {
-		totalRecursiveWage += RecursiveWage(i);
+		totalRecursiveWage += Recursive(i);
 	}
 
 	printf("一般的な賃金体系での合計賃金：%d円\n", totalStandardWage);
