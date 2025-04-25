@@ -1,25 +1,16 @@
 #include<stdio.h>
 
-int Recursive(int hour) {
-	if (hour == 1) {
-		return 100;
-	}
-	int previousWage = RecursiveWage(hour - 1);
-	return previousWage*2-50;
+void PrintHelloWorld(void) {
+	printf("HelloWorld\n");
 }
+int main(void) {
 
-int main() {
-	int hours = 10;
-	int standardWage = 1072;
-	int totalStandardWage = standardWage * hours;
-	int totalRecursiveWage = 0;
+	void (*pfunc)();
 
-	for (int i = 1; i <= hours; i++) {
-		totalRecursiveWage += RecursiveWage(i);
-	}
+	pfunc = PrintHelloWorld;
+	printf("PrintHelloWorldのアドレス = %p\n", PrintHelloWorld);
+	printf("pfuncの内容 = %p\n", *pfunc);
+	pfunc();
 
-	printf("一般的な賃金体系での合計賃金：%d円\n", totalStandardWage);
-	printf("再帰的な賃金体系での合計賃金：%d円\n", totalRecursiveWage);
-
-	return(0);
+		return 0;
 }
