@@ -1,26 +1,25 @@
 #include<stdio.h>
 
-template<typename T1,typename T2>
-T1 Min(T1 a, T2 b) {
-	if (a > b) {
-		return b;
+int Recursive(int hour) {
+	if (hour == 1) {
+		return 100;
 	}
-	if (a < b) {
-		return a;
-	}
+	int previousWage = RecursiveWage(hour - 1);
+	return previousWage*2-50;
 }
-template<>
-char Min<char, char>(char a, char b) {
-	printf("数字以外は代入できません");
-	return 0;
-}
- 
-int main(void) {
-	printf("%d\n", Min<int,int>(114, 514));
-	printf("%f\n", Min<float,float>(11.4f, 51.4f));
-	printf("%lf\n", Min<double,double>(1.14, 5.14));
-	printf("%c\n", Min<char,char>('A', 'B'));
-	
 
-	return 0;
+int main() {
+	int hours = 10;
+	int standardWage = 1072;
+	int totalStandardWage = standardWage * hours;
+	int totalRecursiveWage = 0;
+
+	for (int i = 1; i <= hours; i++) {
+		totalRecursiveWage += RecursiveWage(i);
+	}
+
+	printf("一般的な賃金体系での合計賃金：%d円\n", totalStandardWage);
+	printf("再帰的な賃金体系での合計賃金：%d円\n", totalRecursiveWage);
+
+	return(0);
 }
