@@ -1,44 +1,61 @@
-#include <iostream>
-#include <cstdlib>  
-#include <ctime>    
+#include <stdio.h>
+#include <Windows.h>
+#include <time.h>
 #include <functional>
-#include <thread>   
-#include <chrono>   
 
+// コールバック関数
+void DispResult(int* s, int* kye) {
+    int dice = rand() % 2;
 
-void SetTimeout(std::function<void()> func, int delayMilliseconds) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(delayMilliseconds));
-    func();
+    if (dice == *kye) {
+        if (dice == 0)
+            printf("%dで丁(偶数)でした。当たり\n", dice);
+        else
+            printf("%dで半(奇数)でした。当たり\n", dice);
+    } else {
+        if (dice == 1)
+            printf("%dで半(奇数)でした。はずれ\n", dice);
+        else
+            printf("%dで丁(偶数)でした。はずれ\n", dice);
+    }
+}
+
+// setTimeout関数
+void setTimeout(std::function<void(int*, int*)> p, int seconds, int kye) {
+    // コールバック関数を呼び出す前に指定した秒数だけ待機
+    for (int i = 0; i < seconds; i++) {
+        Sleep(1000);  // 1秒待機
+        printf("%d...\n", seconds - i);  // 残り時間表示
+    }
+
+    // コールバック関数を実行
+    p(&seconds, &kye);
 }
 
 int main() {
-    
-    srand(static_cast<unsigned int>(time(0)));
+    int kye;
+
+    srand(static_cast<unsigned int>(time(NULL))); // 乱数の初期化
+    printf("丁(偶数)なら0、半(奇数)なら1を入力してください\n");
+    scanf_s("%d", &kye);
 
     
-    std::cout << "サイコロを振って、その出目が奇数か偶数かを予想してください。\n";
-    std::cout << "奇数なら 'odd'、偶数なら 'even' を入力してください: ";
-    std::string guess;
-    std::cin >> guess;
+    if (kye != 0 && kye != 1) {
+        printf("無効な入力です。0または1を入力してください。\n");
+        return 1;  
+    }
 
-    
-    int dice = rand() % 6 + 1;  
+    if (kye == 0) {
+        puts("あなたは丁(偶数)を選びました");
+    } else {
+        puts("あなたは半(奇数)を選びました");
+    }
 
-    
-    SetTimeout([=]() {
-        
-        std::cout << "サイコロの出目は: " << dice << std::endl;
+   
+    std::function<void(int*, int*)> p = [](int* s, int* kye) { DispResult(s, kye); };
 
-        // 奇数か偶数かを判定
-        bool isEven = (dice % 2 == 0);
-
-        
-        if ((guess == "even" && isEven) || (guess == "odd" && !isEven)) {
-            std::cout << "予想が当たりました\n";
-        } else {
-            std::cout << "予想が外れました\n";
-        }
-        }, 3000);
+    setTimeout(p, 3, kye);
 
     return 0;
 }
+
