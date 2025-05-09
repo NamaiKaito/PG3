@@ -1,45 +1,44 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-#include<windows.h>
+#include <iostream>
+#include <cstdlib>  
+#include <ctime>    
+#include <functional>
+#include <thread>   
+#include <chrono>   
 
-typedef void(*PFunc)(const char*);
 
-int rollDice() {
-	return(rand() % 6) + 1;
-}
-
-void showResult(const char* result) {
-	printf("%s\n", result);
-}
-
-void checkGuess(int guess, int diceResult, PFunc callback) {
-	const char* result;
-
-	if ((diceResult % 2 == 0 && guess == 0) || (diceResult % 2 != 0 && guess == 1)) {
-		result = "正解";
-	} else {
-		result = "不正解";
-	}
-	Sleep(3000);
-	callback(result);
+void SetTimeout(std::function<void()> func, int delayMilliseconds) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(delayMilliseconds));
+    func();
 }
 
 int main() {
-	srand((unsigned int)time(NULL));
+    
+    srand(static_cast<unsigned int>(time(0)));
 
-	int diceResult = rollDice();
-	int userGuess;
+    
+    std::cout << "サイコロを振って、その出目が奇数か偶数かを予想してください。\n";
+    std::cout << "奇数なら 'odd'、偶数なら 'even' を入力してください: ";
+    std::string guess;
+    std::cin >> guess;
 
-	printf("サイコロの目が半か丁かを予想してください。\n");
-	printf("0:丁,1:半\n");
-	printf("予想してください:");
+    
+    int dice = rand() % 6 + 1;  
 
-	if (scanf_s("%d", &userGuess) != 1 || (userGuess != 0&& userGuess !=1)) {
-		printf("無効な入力です。0か1で予想してください。\n");
-		return 1;
-	}
-	checkGuess(userGuess, diceResult, showResult);
+    
+    SetTimeout([=]() {
+        
+        std::cout << "サイコロの出目は: " << dice << std::endl;
 
-	return 0;
+        // 奇数か偶数かを判定
+        bool isEven = (dice % 2 == 0);
+
+        
+        if ((guess == "even" && isEven) || (guess == "odd" && !isEven)) {
+            std::cout << "予想が当たりました\n";
+        } else {
+            std::cout << "予想が外れました\n";
+        }
+        }, 3000);
+
+    return 0;
 }
