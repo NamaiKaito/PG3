@@ -1,47 +1,27 @@
-#include <stdio.h>
-#include <list>
-#include <iostream>
-#include <string.h>  
+#include <Novice.h>
+#include "GameManager.h"
 
-using namespace std;
+const char kWindowTitle[] = "GC2C_09_ナマイ_カイト";
 
-int main(void) {
-    // 1970年の駅名リスト（std::listを使用）
-    list<const char*> eki_list{
-        "Tokyo", "Kanda", "Akihabara", "Okachimachi", "Ueno", "Uguisudani", "Nippori", "Tabata", "Komagome", "Sugamo", "Otsuka", "Ikebukuro", "Mejiro", "Takadanobaba", "Sin-Okubo", "Shinjuku", "Yoyogi", "Harajuku", "Shibuya", "Ebisu", "Meguro", "Gotanda", "Osaki", "Sinagawa", "Tamachi", "Hamamatsucho", "Shimbashi", "Yurakucho"
-    };
+// Windowsアプリでのエントリーポイント(main関数)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-    // 1970年のリスト表示
-    printf("1970年\n");
-    for (list<const char*>::iterator it = eki_list.begin(); it != eki_list.end(); ++it) {
-        cout << *it << endl;
-    }
+	// ライブラリの初期化
+	Novice::Initialize(kWindowTitle, 1280, 720);
 
-    // 2019年：西日暮里駅を日暮里の次に追加
-    printf("\n2019年\n");
-    for (list<const char*>::iterator it = eki_list.begin(); it != eki_list.end(); ++it) {
-        cout << *it << endl;
+	// 生成
+	GameManager* gameManager = new GameManager();
 
-        if (strcmp(*it, "Nippori") == 0) {
-            ++it;  
-            it = eki_list.insert(it, "Nishi-Nippori");
-            cout << *it << endl;  
-        }
-    }
+	// ゲーム実行
+	gameManager->Run();
 
-    // 2022年：高輪ゲートウェイ駅を田町の次に追加
-    printf("\n2022年\n");
-    for (list<const char*>::iterator it = eki_list.begin(); it != eki_list.end(); ++it) {
-        cout << *it << endl;
+	// 解放
+	delete gameManager;
 
-        if (strcmp(*it, "Tamachi") == 0) {
-            ++it; 
-            it = eki_list.insert(it, "Takanawa Gateway");
-            cout << *it << endl;  
-        }
-    }
+	// ライブラリの終了
+	Novice::Finalize();
 
-    return 0;
+	return 0;
 }
 
 
